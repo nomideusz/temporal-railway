@@ -63,7 +63,7 @@ Temporal listens on `::`, so this works in both IPv6-only and dual-stack Railway
 
 **Back up Postgres.** All workflow state, history and visibility live in the `temporal` and `temporal_visibility` databases on the Postgres volume.
 
-**Resources.** In testing the whole stack idled at about 230 MB of RAM: Temporal 75 MB with 4 shards, Postgres 125 MB, and the UI and Gateway about 11 MB each. A cold first boot (migrations and namespace) was healthy in about 10 seconds. It fits the Hobby plan, and each service stays well under Trial's 512 MB.
+**Resources.** On Railway the whole stack idles at about 410 MB of RAM: Temporal about 110 MB with 4 shards, Postgres about 260 MB, and the UI and Gateway about 20 MB each. A cold first deploy (migrations and the `default` namespace) goes healthy within a few minutes of the build. It fits the Hobby plan, and each service stays well under Trial's 512 MB.
 
 ## Why Deploy Temporal on Railway?
 
