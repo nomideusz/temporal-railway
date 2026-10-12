@@ -1,0 +1,227 @@
+{
+  "services": {
+    "746944e3-3271-4820-b393-d1d745a7d304": {
+      "icon": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
+      "name": "Temporal",
+      "build": {},
+      "deploy": {
+        "startCommand": null,
+        "healthcheckPath": "/api/v1/system-info",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "repo": "https://github.com/nomideusz/temporal-railway",
+        "rootDirectory": "/server"
+      },
+      "networking": {
+        "serviceDomains": {}
+      },
+      "volumeMounts": {},
+      "variables": {
+        "PORT": {
+          "defaultValue": "7243",
+          "description": "Frontend HTTP API port, used by Railway's health check - leave as is",
+          "isOptional": false
+        },
+        "POSTGRES_SEEDS": {
+          "defaultValue": "${{Postgres.RAILWAY_PRIVATE_DOMAIN}}",
+          "description": "Postgres host on the private network",
+          "isOptional": false
+        },
+        "DB_PORT": {
+          "defaultValue": "5432",
+          "description": "Postgres port",
+          "isOptional": false
+        },
+        "POSTGRES_USER": {
+          "defaultValue": "${{Postgres.POSTGRES_USER}}",
+          "description": "Postgres user (creates the temporal and temporal_visibility databases)",
+          "isOptional": false
+        },
+        "POSTGRES_PWD": {
+          "defaultValue": "${{Postgres.POSTGRES_PASSWORD}}",
+          "description": "Postgres password",
+          "isOptional": false
+        },
+        "NUM_HISTORY_SHARDS": {
+          "defaultValue": "4",
+          "description": "History shards. Fixed when the cluster is first created and can NEVER be changed later - raise it before the first deploy if you expect heavy load (Temporal suggests 512+ for large production clusters)",
+          "isOptional": false
+        },
+        "DEFAULT_NAMESPACE": {
+          "defaultValue": "default",
+          "description": "Namespace created on first boot (3 day retention)",
+          "isOptional": false
+        },
+        "RAILWAY_HEALTHCHECK_TIMEOUT_SEC": {
+          "defaultValue": "300",
+          "description": "Every deploy runs the schema migrations before the health check can pass",
+          "isOptional": false
+        }
+      }
+    },
+    "ab52fd30-7445-418d-b4e3-0d7665438e54": {
+      "icon": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
+      "name": "Temporal-UI",
+      "build": {},
+      "deploy": {
+        "startCommand": null,
+        "healthcheckPath": "/healthz",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "image": "temporalio/ui:2.55.0"
+      },
+      "networking": {
+        "serviceDomains": {}
+      },
+      "volumeMounts": {},
+      "variables": {
+        "PORT": {
+          "defaultValue": "8080",
+          "description": "Port the UI listens on - leave as is",
+          "isOptional": false
+        },
+        "TEMPORAL_UI_PORT": {
+          "defaultValue": "8080",
+          "description": "Must match PORT",
+          "isOptional": false
+        },
+        "TEMPORAL_ADDRESS": {
+          "defaultValue": "${{Temporal.RAILWAY_PRIVATE_DOMAIN}}:7233",
+          "description": "Temporal frontend (gRPC) on the private network",
+          "isOptional": false
+        },
+        "TEMPORAL_CORS_ORIGINS": {
+          "defaultValue": "https://${{Gateway.RAILWAY_PUBLIC_DOMAIN}}",
+          "description": "Public URL the UI is opened from - add your custom domain here after adding one",
+          "isOptional": false
+        },
+        "TEMPORAL_AUTH_ENABLED": {
+          "defaultValue": "false",
+          "description": "Set to true to require OIDC sign-in (Google, Auth0, Keycloak, Okta, ...) on top of the Gateway password",
+          "isOptional": true
+        },
+        "TEMPORAL_AUTH_PROVIDER_URL": {
+          "defaultValue": "",
+          "description": "OIDC issuer URL, e.g. https://accounts.google.com",
+          "isOptional": true
+        },
+        "TEMPORAL_AUTH_CLIENT_ID": {
+          "defaultValue": "",
+          "description": "OIDC client ID",
+          "isOptional": true
+        },
+        "TEMPORAL_AUTH_CLIENT_SECRET": {
+          "defaultValue": "",
+          "description": "OIDC client secret",
+          "isOptional": true
+        },
+        "TEMPORAL_AUTH_CALLBACK_URL": {
+          "defaultValue": "https://${{Gateway.RAILWAY_PUBLIC_DOMAIN}}/auth/sso/callback",
+          "description": "OIDC redirect URI to register with your provider",
+          "isOptional": true
+        },
+        "TEMPORAL_AUTH_SCOPES": {
+          "defaultValue": "openid,profile,email",
+          "description": "OIDC scopes",
+          "isOptional": true
+        }
+      }
+    },
+    "7fc10f76-2a64-4268-bfcd-480b57461d0d": {
+      "icon": "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons/svg/caddy.svg",
+      "name": "Gateway",
+      "build": {},
+      "deploy": {
+        "startCommand": null,
+        "healthcheckPath": "/healthz",
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "repo": "https://github.com/nomideusz/temporal-railway",
+        "rootDirectory": "/gateway"
+      },
+      "networking": {
+        "serviceDomains": {
+          "<hasDomain>": {}
+        }
+      },
+      "volumeMounts": {},
+      "variables": {
+        "PORT": {
+          "defaultValue": "8080",
+          "description": "Port Railway routes to - leave as is",
+          "isOptional": false
+        },
+        "UI_UPSTREAM": {
+          "defaultValue": "${{Temporal-UI.RAILWAY_PRIVATE_DOMAIN}}:8080",
+          "description": "Temporal UI on the private network",
+          "isOptional": false
+        },
+        "BASIC_AUTH_USERNAME": {
+          "defaultValue": "admin",
+          "description": "Username for the Temporal Web UI",
+          "isOptional": false
+        },
+        "BASIC_AUTH_PASSWORD": {
+          "defaultValue": "${{secret(24, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Password for the Temporal Web UI (the UI has no login of its own). The Gateway refuses to start without one",
+          "isOptional": false
+        }
+      }
+    },
+    "74ff63d6-4081-404f-81dc-880d329ca383": {
+      "icon": "https://devicons.railway.app/i/postgresql.svg",
+      "name": "Postgres",
+      "build": {},
+      "deploy": {
+        "startCommand": null,
+        "healthcheckPath": null,
+        "restartPolicyType": "ON_FAILURE",
+        "restartPolicyMaxRetries": 10
+      },
+      "source": {
+        "image": "ghcr.io/railwayapp-templates/postgres-ssl:17"
+      },
+      "networking": {
+        "serviceDomains": {}
+      },
+      "volumeMounts": {
+        "b840e9a3-de59-4938-b21b-80dafa9e084c": {
+          "mountPath": "/var/lib/postgresql/data"
+        }
+      },
+      "variables": {
+        "POSTGRES_DB": {
+          "defaultValue": "temporal",
+          "description": "Database name",
+          "isOptional": false
+        },
+        "POSTGRES_USER": {
+          "defaultValue": "temporal",
+          "description": "Database user",
+          "isOptional": false
+        },
+        "POSTGRES_PASSWORD": {
+          "defaultValue": "${{secret(32, \"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\")}}",
+          "description": "Auto-generated database password",
+          "isOptional": false
+        },
+        "PGDATA": {
+          "defaultValue": "/var/lib/postgresql/data/pgdata",
+          "description": "Data subdirectory - keeps Postgres happy on Railway volumes",
+          "isOptional": false
+        },
+        "RAILWAY_DEPLOYMENT_DRAINING_SECONDS": {
+          "defaultValue": "60",
+          "description": "Time for Postgres to shut down cleanly on redeploy",
+          "isOptional": false
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,2 @@
+# Temporal dynamic config overrides (empty = defaults). The server refuses to start
+# without this file. Format: https://docs.temporal.io/references/dynamic-configuration

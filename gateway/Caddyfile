@@ -1,0 +1,19 @@
+# Password gate in front of the Temporal Web UI, which has no login of its own.
+{
+	admin off
+	auto_https off
+}
+
+:{$PORT:8080} {
+	# Railway's health check: unauthenticated, but still proves the UI answers.
+	handle /healthz {
+		reverse_proxy {$UI_UPSTREAM}
+	}
+
+	handle {
+		basic_auth {
+			{$BASIC_AUTH_USERNAME:admin} {$BASIC_AUTH_HASH}
+		}
+		reverse_proxy {$UI_UPSTREAM}
+	}
+}
