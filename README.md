@@ -1,6 +1,6 @@
 # Deploy and Host Temporal on Railway
 
-[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/temporal-server?utm_medium=integration&utm_source=button&utm_campaign=temporal-server)
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/temporal-server?referralCode=sLjDXb&utm_medium=integration&utm_source=button&utm_campaign=temporal-server)
 
 [Temporal](https://temporal.io/) is the open-source durable execution engine. You write workflows as ordinary code in Go, Java, TypeScript, Python, .NET, PHP or Ruby, and Temporal keeps them running through crashes, deploys and outages, with retries, timers, signals and full event history. This template runs the Temporal server with Postgres for both persistence and advanced visibility, so it needs no Elasticsearch, plus the Temporal Web UI behind a password.
 
