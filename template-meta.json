@@ -5,5 +5,6 @@
   "category": "Queues",
   "image": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
   "card_desc": "Temporal: the open-source durable execution engine. Server, password-protected Web UI and Postgres with advanced visibility, schema migrations on every deploy.",
-  "id": "50116d35-3bd0-4990-98ec-e7baaac175fc"
+  "id": "50116d35-3bd0-4990-98ec-e7baaac175fc",
+  "published": true
 }
