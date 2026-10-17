@@ -72,7 +72,7 @@
         "restartPolicyMaxRetries": 10
       },
       "source": {
-        "image": "temporalio/ui:2.55.0"
+        "image": "temporalio/ui:2.56.0"
       },
       "networking": {
         "serviceDomains": {}
