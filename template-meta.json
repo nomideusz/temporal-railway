@@ -3,7 +3,7 @@
   "short_name": "Temporal Server",
   "description": "Durable workflows with Web UI and Postgres visibility, no Elasticsearch",
   "category": "Queues",
-  "image": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
+  "image": "https://raw.githubusercontent.com/two-workspaces/temporal/main/icon.svg",
   "card_desc": "Temporal: the open-source durable execution engine. Server, password-protected Web UI and Postgres with advanced visibility, schema migrations on every deploy.",
   "id": "50116d35-3bd0-4990-98ec-e7baaac175fc",
   "published": true

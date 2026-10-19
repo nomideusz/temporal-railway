@@ -31,7 +31,7 @@ The stack has four services: Temporal, Temporal-UI, Gateway and Postgres.
 - [Temporal self-hosting guide](https://docs.temporal.io/self-hosted-guide)
 - [Temporal on GitHub](https://github.com/temporalio/temporal)
 - [Temporal Web UI](https://github.com/temporalio/ui)
-- [Template source on GitHub](https://github.com/nomideusz/temporal-railway)
+- [Template source on GitHub](https://github.com/two-workspaces/temporal)
 
 ### Implementation Details
 
@@ -57,7 +57,7 @@ Temporal listens on `::`, so this works in both IPv6-only and dual-stack Railway
 
 **History shards are permanent.** `NUM_HISTORY_SHARDS` (default 4) is fixed when the cluster is first created and can never be changed. 4 suits small and medium workloads on this single-node setup. If you expect heavy throughput, raise it before the first deploy. More shards use more memory and database connections.
 
-**Upgrades.** The Temporal service builds from the [template repo](https://github.com/nomideusz/temporal-railway), which pins `temporalio/server` and `temporalio/admin-tools` to the same version in `server/Dockerfile`. Redeploying picks up the repo's current pin, and migrations run before the server starts (it refuses to start on a mismatched schema). To control upgrades yourself, fork the repo and point the service at your fork. Temporal supports upgrading one minor version at a time (1.31 → 1.32 → 1.33), so do not skip minors.
+**Upgrades.** The Temporal service builds from the [template repo](https://github.com/two-workspaces/temporal), which pins `temporalio/server` and `temporalio/admin-tools` to the same version in `server/Dockerfile`. Redeploying picks up the repo's current pin, and migrations run before the server starts (it refuses to start on a mismatched schema). To control upgrades yourself, fork the repo and point the service at your fork. Temporal supports upgrading one minor version at a time (1.31 → 1.32 → 1.33), so do not skip minors.
 
 **CLI, more namespaces and retention.** The server image ships no CLI. For admin commands, add a service from the `temporalio/admin-tools:1.32.1` image with `TEMPORAL_ADDRESS=${{Temporal.RAILWAY_PRIVATE_DOMAIN}}:7233`, open it with `railway ssh`, and run for example `temporal operator namespace create --namespace orders --retention 30d`. Delete the service when you are done.
 

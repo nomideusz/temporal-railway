@@ -1,7 +1,7 @@
 {
   "services": {
     "746944e3-3271-4820-b393-d1d745a7d304": {
-      "icon": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
+      "icon": "https://raw.githubusercontent.com/two-workspaces/temporal/main/icon.svg",
       "name": "Temporal",
       "build": {},
       "deploy": {
@@ -11,7 +11,7 @@
         "restartPolicyMaxRetries": 10
       },
       "source": {
-        "repo": "https://github.com/nomideusz/temporal-railway",
+        "repo": "https://github.com/two-workspaces/temporal",
         "rootDirectory": "/server"
       },
       "networking": {
@@ -62,7 +62,7 @@
       }
     },
     "ab52fd30-7445-418d-b4e3-0d7665438e54": {
-      "icon": "https://raw.githubusercontent.com/nomideusz/temporal-railway/main/icon.svg",
+      "icon": "https://raw.githubusercontent.com/two-workspaces/temporal/main/icon.svg",
       "name": "Temporal-UI",
       "build": {},
       "deploy": {
@@ -142,7 +142,7 @@
         "restartPolicyMaxRetries": 10
       },
       "source": {
-        "repo": "https://github.com/nomideusz/temporal-railway",
+        "repo": "https://github.com/two-workspaces/temporal",
         "rootDirectory": "/gateway"
       },
       "networking": {
