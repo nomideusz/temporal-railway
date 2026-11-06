@@ -8,7 +8,7 @@
 
 The stack has four services: Temporal, Temporal-UI, Gateway and Postgres.
 
-- **The production image, not auto-setup.** `temporalio/auto-setup` is a development convenience image. Temporal stopped publishing it after 1.29, and it never ran migrations safely on upgrade. This template runs the official `temporalio/server` image (pinned at 1.32.1) with `temporal-sql-tool` copied in from the matching `temporalio/admin-tools` image.
+- **The production image, not auto-setup.** `temporalio/auto-setup` is a development convenience image. Temporal stopped publishing it after 1.29, and it never ran migrations safely on upgrade. This template runs the official `temporalio/server` image (pinned at 1.32.2) with `temporal-sql-tool` copied in from the matching `temporalio/admin-tools` image.
 - **Schema migrations on every deploy.** Before the server starts, the entrypoint creates the `temporal` and `temporal_visibility` databases if needed, then runs `update-schema` on both. Railway's health check only passes once the server is answering. To upgrade, bump the image tag.
 - **Advanced visibility on Postgres.** List filters such as `WorkflowType='Order' AND ExecutionStatus='Running'`, custom search attributes and workflow counts all run on Postgres 12+. Elasticsearch would add a JVM using 1 GB or more, and this template leaves it out.
 - **A `default` namespace is ready.** It is created on first boot with 3-day retention.
@@ -59,7 +59,7 @@ Temporal listens on `::`, so this works in both IPv6-only and dual-stack Railway
 
 **Upgrades.** The Temporal service builds from the [template repo](https://github.com/two-workspaces/temporal), which pins `temporalio/server` and `temporalio/admin-tools` to the same version in `server/Dockerfile`. Redeploying picks up the repo's current pin, and migrations run before the server starts (it refuses to start on a mismatched schema). To control upgrades yourself, fork the repo and point the service at your fork. Temporal supports upgrading one minor version at a time (1.31 → 1.32 → 1.33), so do not skip minors.
 
-**CLI, more namespaces and retention.** The server image ships no CLI. For admin commands, add a service from the `temporalio/admin-tools:1.32.1` image with `TEMPORAL_ADDRESS=${{Temporal.RAILWAY_PRIVATE_DOMAIN}}:7233`, open it with `railway ssh`, and run for example `temporal operator namespace create --namespace orders --retention 30d`. Delete the service when you are done.
+**CLI, more namespaces and retention.** The server image ships no CLI. For admin commands, add a service from the `temporalio/admin-tools:1.32.2` image with `TEMPORAL_ADDRESS=${{Temporal.RAILWAY_PRIVATE_DOMAIN}}:7233`, open it with `railway ssh`, and run for example `temporal operator namespace create --namespace orders --retention 30d`. Delete the service when you are done.
 
 **Back up Postgres.** All workflow state, history and visibility live in the `temporal` and `temporal_visibility` databases on the Postgres volume.
 

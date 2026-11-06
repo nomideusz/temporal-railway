@@ -1,9 +1,9 @@
 # Temporal server plus the schema tool from admin-tools, so every deploy migrates
 # the database before the server starts (the stock server image can't).
 # Bump both tags together.
-FROM temporalio/admin-tools:1.32.1 AS tools
+FROM temporalio/admin-tools:1.32.2 AS tools
 
-FROM temporalio/server:1.32.1
+FROM temporalio/server:1.32.2
 COPY --from=tools /usr/local/bin/temporal-sql-tool /usr/local/bin/temporal-sql-tool
 COPY --from=tools /etc/temporal/schema/postgresql/v12 /etc/temporal/schema/postgresql/v12
 COPY dynamicconfig.yaml /etc/temporal/config/dynamicconfig/docker.yaml

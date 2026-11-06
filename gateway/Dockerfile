@@ -1,4 +1,4 @@
-FROM caddy:2.11.7-alpine
+FROM caddy:2.11.9-alpine
 COPY Caddyfile /etc/caddy/Caddyfile
 # Caddy wants a bcrypt hash; derive it from the generated password on every boot.
 # No password = no start, so the UI is never served open by accident.
